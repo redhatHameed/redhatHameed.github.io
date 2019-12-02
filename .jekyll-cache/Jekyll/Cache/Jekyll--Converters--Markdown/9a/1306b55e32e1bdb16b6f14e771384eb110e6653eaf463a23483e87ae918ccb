@@ -1,0 +1,380 @@
+I"�4<p>This blog explain steps how to use Solution Explorer to implement integrated solutions using Red Hat middleware product.Solution explore is web application which put all middleware application in one place and it’s part of Red Hat Managed Integration products.
+All the applications and services used by Solution Explorer are protected by Red Hat Single Sign-On.</p>
+
+<p>The focous of this blog will be :</p>
+
+<ul>
+  <li>Design API , Red Hat’s Apicurio and desing the API definition based on the OpenAPI Specification</li>
+  <li>Implement the RESTful API, Use Red Hat CodeReady Workspaces.</li>
+  <li>Integrate the API, integrate a simple API example with Fuse online</li>
+  <li>Manage the API : Use 3scale API Management solution to enables protect and manage the APIs.</li>
+</ul>
+
+<p>References:</p>
+
+<hr />
+<p>Red Hat OpenShift</p>
+
+<p><a href="https://help.openshift.com">Openshift Online Help Center</a></p>
+
+<p><a href="https://blog.openshift.com">Openshift Blog</a></p>
+
+<hr />
+<p>Fuse Online</p>
+
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_fuse/7.4/">Fuse Documentation</a></p>
+
+<hr />
+<p>End user SSO instance</p>
+
+<p><a href="https://access.redhat.com/products/red-hat-single-sign-on">Red Hat Single Sign-On Overview</a></p>
+
+<hr />
+<p>CodeReady Workspaces</p>
+
+<p><a href="https://developers.redhat.com/products/codeready-workspaces/overview">CodeReady Workspaces Overview </a></p>
+
+<p><a href="https://access.redhat.com/documentation/en-us/red_hat_codeready_workspaces/1.2">CodeReady Workspaces Documentation”</a></p>
+
+<hr />
+<p>3Scale</p>
+
+<p><a href="https://developers.redhat.com/products/3scale/overview/">3Scale Overview</a></p>
+
+<p><a href="https://www.3scale.net">3Scale Website</a></p>
+
+<hr />
+
+<p><img src="../images/web-app.png" alt="alt text" title="outline" /></p>
+
+<h3 id="the-step-by-step-guide-to-your-api-desing-and-integration-using-red-hat-integration-products">The Step-by-Step Guide to Your API desing and integration using Red Hat integration products</h3>
+
+<h3 id="task-1-design-api-with-the-apicurio">Task 1: Design API with the Apicurio</h3>
+
+<p><strong>Step1.  Importing APIs with Apicurio Studio</strong></p>
+
+<ul>
+  <li>Download the API example from</li>
+</ul>
+
+<p>https://raw.githubusercontent.com/redhatHameed/Solution-Explorer/master/Locations.json</p>
+
+<ul>
+  <li>
+    <p>Log in to the API Curio</p>
+  </li>
+  <li>
+    <p>Click on Open API</p>
+  </li>
+  <li>
+    <p>click on Edit API to walk through your newly imported API</p>
+  </li>
+  <li>
+    <p>verify our data definitions for the API. Click on the location/phone{id} link under the Paths</p>
+  </li>
+</ul>
+
+<p><img src="../images/apicurio-1.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>Notice that this API path has a single path parameter (id defined as an int32) and a single GET operation defined. Click on the GET operation, then click the location drop-down which is part of the 200 OK response</li>
+</ul>
+
+<p>![alt text](../images/apicurio-2.png[integration, role=”integr8ly-img-responsive”]</p>
+
+<ul>
+  <li>Verify the location object Click on the &lt;/&gt; location object link under the Data Types section. Notice that the object has a bunch of properties defined that make up the object.
+   </li>
+</ul>
+
+<p><img src="../images/apicurio-3.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<p><strong>Step2 .  Generate the Fuse Project</strong></p>
+
+<ul>
+  <li>Generate Fuse/Camel Java project by selecting Generate button from Apicurio dashboard and select the Fuse version.  </li>
+</ul>
+
+<p><img src="../images/apicurio-4.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>Download and review the project files and create a new Repo on Github and push the project.</li>
+</ul>
+
+<h3 id="step-1-create-a-code-ready-environment"> Step 1: Create a code ready environment.</h3>
+
+<ul>
+  <li>
+    <p>Log in to the link:{che-url}[{code-ready-service}, window=”_blank”, id=”{context}-4”] Dashboard</p>
+  </li>
+  <li>use your unique username as your workspace name.</li>
+  <li>Select “Redhat Fuse” stack, increase the RAM to 4GB and then click Create.</li>
+</ul>
+
+<p><img src="../images/codeready-1.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>Click on Create to generate and open the workspace.</li>
+  <li>Click on Open in IDE, and then  Click Start</li>
+</ul>
+
+<h3 id="step-2-import-the-skeleton-projects-from-git">Step 2: Import the skeleton projects from Git</h3>
+
+<ul>
+  <li>
+    <p>assume that you have pushed the generated project into GitHub. completed in Task 1</p>
+  </li>
+  <li>
+    <p>Click on Workspace &gt; Import Project from the main menu. A pop-up will appear.</p>
+  </li>
+</ul>
+
+<p><img src="../images/codeready-2.png" alt="alt text" title="integr8ly-img-responsive" />
+ </p>
+
+<h3 id="step-3-complete-route-implementation">Step 3: Complete Route implementation</h3>
+
+<p><img src="../images/codeready-3.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<p>the complete implementation can be find from this link:</p>
+
+<p>https://github.com/redhatHameed/Solution-Explorer</p>
+
+<h3 id="step-5-create-your-openshift-project-and-set-up-a-sample-database">Step 5: Create your Openshift project and set up a sample database</h3>
+
+<ul>
+  <li>
+    <p>Open Red Hat Openshift link:{openshift-host}/console/project[Red Hat Openshift, window=”_blank”] .</p>
+  </li>
+  <li>
+    <p>Create your unique namespace</p>
+  </li>
+  <li>
+    <p>Click on Catalog on the left menu, then navigate to the Databases menu and select Postgres. From there, select the PostgreSQL (Ephemeral) template.</p>
+  </li>
+  <li>
+    <p>the pop-up window that appears, click the Next button to reach the Configuration page.</p>
+  </li>
+  <li>
+    <p>Update PostgreSQL Connection Username to dbuser and PostgreSQL Connection Password to password</p>
+  </li>
+  <li>
+    <p>Click Next and ensure Do not Bind at this time is selected. Click Create to generate the service.</p>
+  </li>
+  <li>
+    <p>update or make sure that the implementation project has the same configuration in the properties file.</p>
+  </li>
+</ul>
+
+<p><img src="../images/codeready-4.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<h3 id="step-6-run-and-deploy-the-project">Step 6: Run and  Deploy the project</h3>
+
+<ul>
+  <li>Test the project locally, navigate Manage commands screen, double-click the run:spring-boot script and hit Run. The script will run locally in code ready.
+ </li>
+  <li>
+    <p>Once SpringBoot has started-up, right-click the dev-machine (under Machines) and select Servers. Click the link corresponding to port 8080. A new tab should open <code class="highlighter-rouge">/locations</code> to the URI</p>
+  </li>
+  <li>Next deploy it to our running OpenShift environment</li>
+  <li>Navigate back to the OpenShift web UI and click the Copy Login Command link.</li>
+</ul>
+
+<p><img src="../images/codeready-5.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>Navigate back to Code Ready, open the terminal, and paste the login command from your clipboard. Once you’ve logged in, select the OpenShift project you used earlier using <code class="highlighter-rouge">oc project &lt;your project name&gt;</code></li>
+</ul>
+
+<p><img src="../images/codeready-6.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>To run the fabric8 Maven command to deploy our project, navigate back to the Manage commands screen, double-click the fabric8:deploy script.</li>
+</ul>
+
+<p>Click Run. The script will run and deploy to your OCPPROJECT.</p>
+
+<p><img src="../images/codeready-7.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>verify your service by <code class="highlighter-rouge">&lt;your openshift url&gt;/locations</code> or  can also search for individual locations by adjusting the URI to <code class="highlighter-rouge">/locations/{id} e.g. /locations/100</code></li>
+</ul>
+
+<h3 id="integrate-the-api">Integrate the API</h3>
+
+<h3 id="step-1-create-database-connection">Step 1: Create database connection</h3>
+
+<ul>
+  <li>Log in to the link:{fuse-url}[Red Hat Fuse Online, window=”_blank”, id=”{context}-1”] console.</li>
+  <li>Click on <strong>Connections &gt; Create Connection</strong></li>
+  <li>Select <strong>Database</strong></li>
+  <li>Enter below values for Database Configuration</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Connection URL: jdbc:postgresql://postgresql.OCPPROJECT.svc:5432/sampledb
+Username      : dbuser
+Password      : password
+Schema        : &lt;blank&gt;
+
+</code></pre></div></div>
+<ul>
+  <li>
+    <p>Click Validate and verify if the connection is successful. Click Next to proceed.</p>
+  </li>
+  <li>
+    <p>Add Connection details: Connection Name: LocationDB and Click Creat</p>
+  </li>
+</ul>
+
+<h3 id="step-2create-webhook-integration">Step 2:Create webhook integration</h3>
+
+<ul>
+  <li>click on Integrations &gt; Create Integration</li>
+  <li>Choose Webhook</li>
+  <li>Click on Incoming webhook</li>
+  <li>It navigates to the Webhook Token screen. Click Next</li>
+  <li>Define the Output Data Type.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Select type from the dropdown as JSON instance.
+ Enter Data type Name: Custom
+ For Definition:, copy below JSON data.
+ Click Done
+ 
+ 
+
+
+jason {
+  "id": 1,
+  "name": "xxx",
+  "type": "Regional Branch",
+  "status": "1",
+  "location": {
+    "lat": "-28.32555",
+    "lng": "-5.91531"
+  }
+}
+</code></pre></div></div>
+
+<ul>
+  <li>Click on LocationDB from the catalog and then select Invoke SQL</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>INSERT INTO locations (id,name,lat,lng,location_type,status) VALUES (:#id,:#name,:#lat,:#lng,:#location_type,:#status )
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>Click on Add Step and select Data mapper</p>
+  </li>
+  <li>
+    <p>Drag and drop the matching Source Data types to all their corresponding Targets as per the following screenshot. When finished, click Done.</p>
+  </li>
+</ul>
+
+<p><img src="../images/fuse-online-1.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>Click Publish on the next screen and add integration name: addLocation and publish again.</li>
+</ul>
+
+<h3 id="step-3-create-a-post-request">Step 3: Create a POST request</h3>
+
+<ul>
+  <li>Copy the External URL per the below screenshot</li>
+</ul>
+
+<p><img src="../images/fuse-online-2.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li> Run below the curl command and make sure to use your URL you copied and pasted
+ 
+ 
+```
+ curl -k –header “Content-Type: application/json”
+–request POST
+–data ‘{“id”: 101, “name”: “userxx”, “type”: “Regional Branch”, “status”: “1”, “location”: { “lat”: “-28.32555”, “lng”: “-5.91531” }}’
+https:/<fuse-copied-url></fuse-copied-url></li>
+</ul>
+
+<p>```</p>
+
+<ul>
+  <li>Click on Activity &gt; Refresh and verify if the new record is created.</li>
+</ul>
+
+<h2 id="manage-the-api">Manage the API</h2>
+
+<h3 id="step-1-create-a-new-api">Step 1: Create a New API</h3>
+
+<ul>
+  <li>
+    <p>Open the link:{api-management-url}[{3Scale-ProductName} Login screen, window=”_blank”, id=”{context}-6”].</p>
+  </li>
+  <li>
+    <p>Click on NEW API on 3scale Dashboard</p>
+  </li>
+  <li>
+    <p>Mention the below details:</p>
+
+    <p>Name :Location API
+System Name : location-sso :</p>
+  </li>
+</ul>
+
+<p>![alt text](../images/3scale-1.png[integration, role=”integr8ly-img-responsive”]</p>
+
+<ul>
+  <li>
+    <p>Create Application Plan with name <strong>location-plan</strong></p>
+  </li>
+  <li>
+    <p>add an application to Application Plan by selecting <strong>Accounts</strong> from the dashboard and clicking on <strong>create application</strong></p>
+  </li>
+</ul>
+
+<p><img src="../images/3scale-2.png" alt="alt text" title="integr8ly-img-responsive" /></p>
+
+<ul>
+  <li>select application plan name from drop-down as <strong>location-plan</strong> and give application name</li>
+</ul>
+
+<p>![alt text](../images/3scale-3.png[integration, role=”integr8ly-img-responsive”]</p>
+
+<ul>
+  <li>Click on <strong>Integration</strong> link and select <strong>Configuration</strong> and then click the link <strong>add the base URL of your API and save the configuration</strong></li>
+</ul>
+
+<p>![alt text](../images/3scale-4.png[integration, role=”integr8ly-img-responsive”]</p>
+
+<ul>
+  <li>Add Below details:</li>
+</ul>
+
+<p>   </p>
+
+<p>Private Base URL* : Route of the location API deployed in openshift project</p>
+
+<p>API GATEWAY*-( you can get the details from 3scale openshift project by going inside the routes)</p>
+
+<p>Staging Public Base URL*
+   Production Public Base URL* <br /></p>
+
+<p>API test GET request*   write  <code class="highlighter-rouge">/locations</code> inside the text box.</p>
+
+<p><img src="../images/3scale-6.png" alt="alt text" title="integr8ly-img-responsive" />
+<img src="../images/3scale-5.png" alt="alt text" title="integr8ly-img-responsive" />
+ </p>
+
+<ul>
+  <li>
+    <p>Click on <strong>Update &amp; test in Staging Environment</strong></p>
+  </li>
+  <li>
+    <p>Test API</p>
+
+    <p>curl “https://rh-test-3scalefuse-1.staging.3scale.apps.ahameed-3d57.open.redhat.com:443/locations?user_key=79dd46c91bbf208056ac2b62a63e6104”</p>
+  </li>
+</ul>
+
+:ET
