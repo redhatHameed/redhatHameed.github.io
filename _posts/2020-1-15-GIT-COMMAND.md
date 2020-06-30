@@ -3,7 +3,16 @@ layout: post
 title:  Helpful git Commands
 ---
 
+push new branch
+
+git push -u origin branch-name 
+
+
 Git pull wants you to either remove or save your current work so that the merge it triggers doesn't cause conflicts with your uncommitted work. Note that you should only need to remove/save untracked files if the changes you're pulling create files in the same locations as your local uncommitted files.
+
+rename Branch
+
+git branch -m <new_name>
 
 
 Remove your uncommitted changes
